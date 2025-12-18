@@ -38,4 +38,4 @@ class WebServer:
                 body = f"<h1>{e.message}</h1>"
                 Response(request, e.code, {"Content-Type": "text/html"}, body.encode()).send()
             except Exception as e:
-                Response(request, 500, {"Content-Type": "text/html"}, b"<h1>Internal Server Error</h1>").send()
+                print(f"Internal Server Error: {e}")
