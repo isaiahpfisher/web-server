@@ -9,6 +9,16 @@ class RouterTest(unittest.TestCase):
         path = Router._full_path("hello.html")
         expected_path = os.path.join(Router.ASSET_DIR, "hello.html")
         self.assertEqual(path, expected_path)
+    
+    def test_resolve_returns_content_and_type(self):
+        content, mime_type = Router.resolve("/about")
+        self.assertIsInstance(content, bytes)
+        self.assertEqual(mime_type, "text/html")
+        
+    def test_correct_mime_type_is_returned(self):
+        content, mime_type = Router.resolve("/example.png")
+        self.assertIsInstance(content, bytes)
+        self.assertEqual(mime_type, "image/png")
         
     def test_path_with_leading_slash(self):
         path = Router._full_path("/hello.html")
