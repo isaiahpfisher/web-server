@@ -7,9 +7,6 @@ class Request:
         self.request = connection.recv(1024).decode()
         self._parse()
     
-    def get_header(self, key):
-        return self.headers.get(key.lower())
-    
     def _parse(self):
         if not self.request:
             raise EmptyRequestException()
@@ -24,4 +21,4 @@ class Request:
         for line in lines[1:]:
             if line:
               key, value = line.split(":", 1)
-              self.headers[key.lower()] = value.strip()
+              self.headers[key] = value.strip()

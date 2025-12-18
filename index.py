@@ -29,5 +29,6 @@ while True:
         response.send()
         
       except EmptyRequestException as e:
-          print(e)
+          print(f"Ignored empty request from {address}")
+          continue
       

@@ -4,25 +4,24 @@ class Response:
         self.status_code = status_code
         self.headers = headers
         self.body = body
-        
     
     def send(self):
-       self.request.connection.sendall(self._build().encode()) 
+        body_bytes = self.body.encode() if isinstance(self.body, str) else self.body
+        header_lines = [f"{self.request.version} {self.status_code} {self._get_status()}"]
         
-    def _build(self):
-        response = []
-        response.append(f"{self.request.version} {self.status_code} {self._get_status()}")
         for key, value in self.headers.items():
-            response.append(f"{key}: {value}")
-        response.append("")
-        response.append(self.body)
+            header_lines.append(f"{key}: {value}")
+        if "Content-Length" not in self.headers:
+            header_lines.append(f"Content-Length: {len(body_bytes)}")
         
-        return "\r\n".join(response)
-    
+        header_lines.append("") 
+        header_block = "\r\n".join(header_lines).encode()
+        self.request.connection.sendall(header_block + b"\r\n" + body_bytes)
+
     def _get_status(self):
-        if self.status_code == 200:
-            return "OK"
-        elif self.status_code == 404:
-            return "Not Found"
-        else:
-            return "Internal Server Error"
+        STATUS_MAP = {
+            200: "OK",
+            404: "Not Found",
+            500: "Internal Server Error",
+        }
+        return STATUS_MAP.get(self.status_code, "Unknown")
