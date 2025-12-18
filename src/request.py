@@ -1,4 +1,5 @@
 import socket
+from exceptions.empty_request import EmptyRequestException
 
 class Request:
     def __init__(self, connection: socket):
@@ -11,8 +12,7 @@ class Request:
     
     def _parse(self):
         if not self.request:
-            # raise ValueError("Empty request")
-            return # TODO: handle this
+            raise EmptyRequestException()
         
         lines = self.request.splitlines()
         method, path, version = lines[0].split()

@@ -1,6 +1,7 @@
 import socket
 from src.request import Request
 from src.response import Response
+from exceptions.empty_request import EmptyRequestException
 
 # constants
 HOST = 'localhost'
@@ -19,8 +20,14 @@ while True:
   connection, address = app.accept()
 
   with connection:
-      request = Request(connection)
       
-      body = "<h1>Hello, World!</h1>"
-      response = Response(request, 200, {"Content-Type": "text/html"}, body)
-      response.send()
+      try:
+        request = Request(connection)
+        
+        body = "<h1>Hello, World!</h1>"
+        response = Response(request, 200, {"Content-Type": "text/html"}, body)
+        response.send()
+        
+      except EmptyRequestException as e:
+          print(e)
+      
