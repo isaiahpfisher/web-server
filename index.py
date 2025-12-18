@@ -1,6 +1,7 @@
 import socket
 from src.request import Request
 from src.response import Response
+from src.router import Router
 from exceptions.empty_request import EmptyRequestException
 
 # constants
@@ -20,15 +21,15 @@ while True:
   connection, address = app.accept()
 
   with connection:
-      
       try:
         request = Request(connection)
-        
-        body = "<h1>Hello, World!</h1>"
+        body = Router.resolve(request.path)
         response = Response(request, 200, {"Content-Type": "text/html"}, body)
         response.send()
         
       except EmptyRequestException as e:
           print(f"Ignored empty request from {address}")
           continue
+      except FileNotFoundError as e:
+          Response(request, 404, {"Content-Type": "text/html"}, b"<h1>404</h1>").send()
       
