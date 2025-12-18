@@ -3,6 +3,8 @@ from src.request import Request
 from src.response import Response
 from src.router import Router
 from exceptions.empty_request import EmptyRequestException
+from exceptions.not_found import NotFoundException
+from exceptions.forbidden import ForbiddenException
 
 # constants
 HOST = 'localhost'
@@ -23,13 +25,13 @@ while True:
   with connection:
       try:
         request = Request(connection)
-        body = Router.resolve(request.path)
-        response = Response(request, 200, {"Content-Type": "text/html"}, body)
+        body, mime_type = Router.resolve(request.path)
+        response = Response(request, 200, {"Content-Type": mime_type}, body)
         response.send()
         
       except EmptyRequestException as e:
           print(f"Ignored empty request from {address}")
           continue
-      except FileNotFoundError as e:
-          Response(request, 404, {"Content-Type": "text/html"}, b"<h1>404</h1>").send()
-      
+      except (NotFoundException, ForbiddenException) as e:
+          body = f"<h1>{e.message}</h1>"
+          Response(request, e.code, {"Content-Type": "text/html"}, body.encode()).send()

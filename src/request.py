@@ -6,6 +6,9 @@ class Request:
         self.connection = connection
         self.request = connection.recv(1024).decode()
         self._parse()
+        
+    def header(self, key: str) -> str:
+        return self.headers.get(key.lower())
     
     def _parse(self):
         if not self.request:

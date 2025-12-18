@@ -18,8 +18,8 @@ class RequestTest(unittest.TestCase):
         self.assertEqual(request.method, "GET")
         self.assertEqual(request.path, "/hello")
         self.assertEqual(request.version, "HTTP/1.1")
-        self.assertEqual(request.headers["Host"], "localhost:3000")
-        self.assertEqual(request.headers["User-Agent"], "TestRunner")
+        self.assertEqual(request.header("Host"), "localhost:3000")
+        self.assertEqual(request.header("User-Agent"), "TestRunner")
     
     def test_valid_post_request(self):
         raw_request = (
@@ -35,8 +35,8 @@ class RequestTest(unittest.TestCase):
         self.assertEqual(request.method, "POST")
         self.assertEqual(request.path, "/hello")
         self.assertEqual(request.version, "HTTP/1.1")
-        self.assertEqual(request.headers["Host"], "localhost:3000")
-        self.assertEqual(request.headers["User-Agent"], "TestRunner")
+        self.assertEqual(request.header("Host"), "localhost:3000")
+        self.assertEqual(request.header("User-Agent"), "TestRunner")
         
     def test_empty_request(self):
         raw_request = b""

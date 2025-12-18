@@ -21,6 +21,7 @@ class Response:
     def _get_status(self):
         STATUS_MAP = {
             200: "OK",
+            403: "Forbidden",
             404: "Not Found",
             500: "Internal Server Error",
         }
