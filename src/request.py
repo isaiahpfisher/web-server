@@ -21,4 +21,4 @@ class Request:
         for line in lines[1:]:
             if line:
               key, value = line.split(":", 1)
-              self.headers[key] = value.strip()
+              self.headers[key.lower()] = value.strip()

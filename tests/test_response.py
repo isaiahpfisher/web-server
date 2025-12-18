@@ -1,5 +1,4 @@
 import unittest
-from mocks.socket import MockSocket
 from src.response import Response
 from mocks.socket import MockSocket
 
